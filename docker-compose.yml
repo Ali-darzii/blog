@@ -48,7 +48,7 @@ services:
       - RedisDB=1
     ports:
       - "8000:8000"
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && gunicorn --config gunicorn_config.py aurigaone.wsgi:application"
     # following command is used in production mode
     # command: sh -c "python manage.py migrate && gunicorn -c gunicorn.conf.py Auth.wsgi:application"
     networks:
@@ -62,7 +62,24 @@ services:
     container_name: blog-new-redis
     networks:
       - live
-
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+#for ssl
+#    certbot:
+#      image: certbot/certbot:latest
+#      volumes:
+#        - /var/certbot/conf:/etc/letsencrypt/:rw
+#        - /var/certbot/www/:/var/www/certbot/:rw
+#      depends_on:
+#        - nginx
 volumes:
   postgres_data:
 networks:

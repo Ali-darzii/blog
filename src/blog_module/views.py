@@ -1,11 +1,7 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
-from rest_framework import status 
 from blog_module.models import Blog
 from blog_module.serializers import BlogSerializer
-from utils.permission import IsOwner
 from rest_framework.exceptions import PermissionDenied
 
 class BlogViewSet(viewsets.ModelViewSet):
