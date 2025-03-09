@@ -2,7 +2,7 @@ services:
   #  postgres db & postgres admin panel
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: blog-pgadmin
+    container_name: blog-new-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: youremail@gmail.com
       PGADMIN_DEFAULT_PASSWORD: your_password
@@ -15,7 +15,7 @@ services:
       - live
   postgres:
     image: postgres:latest
-    container_name: blog-postgres
+    container_name: blog-new-postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -31,7 +31,7 @@ services:
     build:
       context: ./src
       dockerfile: Dockerfile
-    container_name: blog-backend
+    container_name: blog-new-backend
     volumes:
       - ./src:/app/
     environment:
@@ -59,7 +59,7 @@ services:
       - redis
   redis:
     image: redis:7.0.11-alpine
-    container_name: blog-redis
+    container_name: blog-new-redis
     networks:
       - live
 

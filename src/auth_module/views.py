@@ -11,7 +11,7 @@ from utils.Responses import ErrorResponses
 
 class UserLogView(APIView):
     def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data.get("username")
         password = serializer.validated_data.get("password")

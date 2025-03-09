@@ -13,9 +13,9 @@ class UserRegisterSerializer(serializers.Serializer):
     def validate_username(self, username):
         try:
             User.objects.get(username=username)
-        except User.DoesNotExist:
             raise serializers.ValidationError(detail=ErrorResponses.USERNAME_IS_TAKEN)
-        return username
+        except User.DoesNotExist:
+            return username
 
     def validate_password(self, password):
         if not fullmatch(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$", password):
