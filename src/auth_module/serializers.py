@@ -25,7 +25,7 @@ class UserRegisterSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs.get("password") != attrs.get("confirm_password"):
             raise serializers.ValidationError(detail="password and confirm_password are not match.")
-        return super(UserRegisterSerializer, self).validate()
+        return super(UserRegisterSerializer, self).validate(attrs)
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
