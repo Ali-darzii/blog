@@ -1,28 +1,24 @@
+from codecs import replace_errors
+from idlelib.macosx import isAquaTk
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from blog_module.models import Blog
 from blog_module.serializers import BlogSerializer
 from rest_framework.exceptions import PermissionDenied
+from utils.permission import IsOwner
+
 
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
     def get_permissions(self):
-        if self.action in ['create','update','partial_update','destroy']:
+        if self.action == 'create':
             return [IsAuthenticated()]
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [IsAuthenticated(),IsOwner()]
         return [AllowAny()]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-    def perform_update(self, serializer):
-        blog = self.get_object()
-        if blog.author != self.request.user:
-            raise PermissionDenied("You are not allowed to update this blog")
-        serializer.save()
-
-    def perform_destroy(self, instance):
-        if instance.author != self.request.user:
-            raise PermissionDenied("You are not allowed to destroy this blog")
-        instance.delete()

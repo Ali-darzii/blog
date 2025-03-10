@@ -15,3 +15,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -r requirements.txt
+
+#EXPOSE 8000
+#CMD ["sh","-c","python manage.py migrate","gunicorn blog.wsgi:application --bind 0.0.0.0:8000 --workers=1 --timeout 30"]

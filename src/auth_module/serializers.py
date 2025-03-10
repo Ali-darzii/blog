@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from re import fullmatch
-
 from utils.Responses import ErrorResponses
 
 

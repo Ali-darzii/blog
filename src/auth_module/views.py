@@ -11,6 +11,7 @@ from utils.Responses import ErrorResponses
 
 class UserLogView(APIView):
     def post(self, request):
+        """ user register """
         serializer = UserRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data.get("username")
@@ -22,6 +23,7 @@ class UserLogView(APIView):
 
 
     def put(self, request):
+        """ user login """
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data.get("username")
@@ -38,6 +40,20 @@ class UserLogView(APIView):
             "user_id": user.id,
         }
         return Response(data=data, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        """ user logout """
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            refresh_token = request.data["refresh_token"]
+            tk = RefreshToken(refresh_token)
+            tk.blacklist()
+            return Response({"data":"Successfully logged out."}, status=status.HTTP_204_NO_CONTENT)
+
+        except Exception:
+            return Response(data=ErrorResponses.TOKEN_IS_EXPIRED_OR_INVALID, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
