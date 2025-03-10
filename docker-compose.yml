@@ -34,6 +34,7 @@ services:
     container_name: blog-new-backend
     volumes:
       - ./src:/app/
+      - static_volume:/app/staticfiles
     environment:
       - ALLOWED_HOSTS=localhost,127.0.0.1
       - DEBUG=True
@@ -66,9 +67,10 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "1337:80"
     volumes:
       - ./src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/static
     depends_on:
       - backend
     networks:
@@ -81,8 +83,11 @@ services:
 #        - /var/certbot/www/:/var/www/certbot/:rw
 #      depends_on:
 #        - nginx
+
+
 volumes:
   postgres_data:
+  static_volume:
 networks:
   live:
 
