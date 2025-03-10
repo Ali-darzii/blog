@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
@@ -43,8 +44,6 @@ class UserLogView(APIView):
 
     def delete(self, request):
         """ user logout """
-        serializer = UserLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
         try:
             refresh_token = request.data["refresh_token"]
             tk = RefreshToken(refresh_token)
@@ -54,7 +53,7 @@ class UserLogView(APIView):
         except Exception:
             return Response(data=ErrorResponses.TOKEN_IS_EXPIRED_OR_INVALID, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
+    def get_permissions(self):
+        if self.request.method == "DELETE":
+            return [IsAuthenticated()]
+        return [AllowAny()]

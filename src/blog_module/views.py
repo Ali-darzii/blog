@@ -5,7 +5,6 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from blog_module.models import Blog
 from blog_module.serializers import BlogSerializer
-from rest_framework.exceptions import PermissionDenied
 from utils.permission import IsOwner
 
 
