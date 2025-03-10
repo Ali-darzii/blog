@@ -67,11 +67,12 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
+    networks:
+      - live
 #for ssl
 #    certbot:
 #      image: certbot/certbot:latest
