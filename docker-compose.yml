@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    container_name: blog-backend
+    volumes:
+      - ./src:/app/
+    environment:
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DEBUG=True
+      - SECRET_KEY=HereIsYourSecret_Keyqweroqpowek12312313
+      - mongo_user=user
+      - mongo_pass=pass
+    ports:
+      - "8000:8000"
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    # following command is used in production mode
+    # command: sh -c "python manage.py migrate && gunicorn -c gunicorn.conf.py Auth.wsgi:application"
+    networks:
+      - live
+    restart: on-failure
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    container_name: blog-mongodb
+    ports:
+      - "27018:27018"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    networks:
+      - live
+volumes:
+  mongodb_data:
+networks:
+  live:
