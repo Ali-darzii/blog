@@ -14,14 +14,13 @@ class New(models.Model):
     def __str__(self):
         return self.title
 
-
 class User(BaseModel):
     _username_validator = UnicodeUsernameValidator()
     _validate_email = EmailValidator()
 
-    last_login = models.DateTimeField(auto_now=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    username = models.CharField(max_length=30)
+    last_login = models.DateTimeField(auto_now=True, null=True, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    username = models.CharField(max_length=33)
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     is_superuser = models.BooleanField(default=False)
@@ -55,10 +54,8 @@ class User(BaseModel):
         return check_password(raw_password, self.password)
 
     def clean(self):
-        super(User, self).clean()
         self._username_validator(self.username)
         if self.email:
             self.email = self._normalize_email(self.email)
             self._validate_email(self.email)
-        if not self.password:
-            raise ValidationError("Password is required")
+
