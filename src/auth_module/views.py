@@ -4,15 +4,13 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
-from auth_module.models import User
+from auth_module.models import User, New
 
 
 class UserLogView(GenericAPIView):
 
     def post(self, request):
-        # user = User(username="aqa_meti")
-        # user.set_password("sdfawioksfdnropwe1")
-        # user.insert_one()
-        alls = User.get_all(["-username"])
-
-        return Response({"data": alls}, status=status.HTTP_201_CREATED)
+        user = User(username="sfsssff",email="ali.s@gmail.com")
+        user.set_password('<PASSWORD>1qwe')
+        user.save()
+        return Response({"data": ""}, status=status.HTTP_201_CREATED)
